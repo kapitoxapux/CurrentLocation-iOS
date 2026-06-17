@@ -11,7 +11,7 @@ final class LocationTracker: NSObject, ObservableObject {
     private let manager = CLLocationManager()
     private let buffer  = LocationBuffer()
     private let sender  = LocationSender()
-    private var flushTask: Task<Void, Never>?
+    private var flushTimer: Timer?
 
     override init() {
         super.init()
@@ -28,14 +28,14 @@ final class LocationTracker: NSObject, ObservableObject {
         manager.startUpdatingLocation()
         isTracking = true
         statusMessage = "Трекинг активен"
-        startFlushLoop()
+        startFlushTimer()
         UserDefaults.standard.set(true, forKey: "tracking_enabled")
     }
 
     func stop() {
         manager.stopUpdatingLocation()
-        flushTask?.cancel()
-        flushTask = nil
+        flushTimer?.invalidate()
+        flushTimer = nil
         isTracking = false
         statusMessage = "Остановлен"
         UserDefaults.standard.set(false, forKey: "tracking_enabled")
@@ -47,13 +47,14 @@ final class LocationTracker: NSObject, ObservableObject {
 
     // MARK: - Private
 
-    private func startFlushLoop() {
-        flushTask = Task { [weak self] in
-            while !Task.isCancelled {
-                try? await Task.sleep(nanoseconds: UInt64(Config.sendInterval * 1_000_000_000))
-                await self?.flush()
-            }
+    private func startFlushTimer() {
+        flushTimer?.invalidate()
+        flushTimer = Timer.scheduledTimer(withTimeInterval: Config.sendInterval, repeats: true) { [weak self] _ in
+            guard let self else { return }
+            Task { await self.flush() }
         }
+        // Добавляем в common RunLoop mode чтобы работал даже при прокрутке UI
+        RunLoop.main.add(flushTimer!, forMode: .common)
     }
 
     private func flush() async {

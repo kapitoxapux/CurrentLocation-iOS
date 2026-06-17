@@ -13,8 +13,10 @@ struct RefreshResponse: Decodable {
 struct AuthClient {
     private let session = URLSession.shared
 
-    func register(deviceID: String) async throws -> RegisterResponse {
-        try await post(path: "/auth/register", body: ["android_id": deviceID])
+    func register(deviceID: String, name: String? = nil) async throws -> RegisterResponse {
+        var body = ["android_id": deviceID]
+        if let name { body["name"] = name }
+        return try await post(path: "/auth/register", body: body)
     }
 
     func refresh(token: String) async throws -> RefreshResponse? {

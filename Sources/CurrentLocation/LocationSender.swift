@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 // Отправка точек на сервер — аналог LocationSender.kt
 actor LocationSender {
@@ -31,7 +32,8 @@ actor LocationSender {
 
     private func registerDevice() async -> String? {
         let deviceID = deviceIdentifier()
-        guard let r = try? await authClient.register(deviceID: deviceID) else { return nil }
+        let deviceName = await MainActor.run { UIDevice.current.name }
+        guard let r = try? await authClient.register(deviceID: deviceID, name: deviceName) else { return nil }
         KeychainStorage.save(r.access_token,  forKey: Self.accessKey)
         KeychainStorage.save(r.refresh_token, forKey: Self.refreshKey)
         return r.access_token
