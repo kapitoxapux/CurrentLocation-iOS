@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>location</string>
+    </array>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Приложению нужен постоянный доступ к геолокации для фонового трекинга.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Приложению нужен доступ к геолокации для отображения координат.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Приложению нужен постоянный доступ к геолокации для фонового трекинга.</string>
+</dict>
+</plist>

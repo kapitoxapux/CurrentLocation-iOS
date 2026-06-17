@@ -1,0 +1,11 @@
+.DS_Store
+/.build
+/Packages
+xcuserdata/
+DerivedData/
+.swiftpm/
+.netrc
+/xtool
+
+# Локальный конфиг с реальным URL сервера — не коммитить
+Sources/CurrentLocation/LocalConfig.swift

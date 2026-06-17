@@ -1,0 +1,7 @@
+// Скопируй в LocalConfig.swift и заполни реальными значениями.
+// Этот файл не попадает в git.
+
+enum LocalConfig {
+    static let apiBaseURL = "https://your-server:port"
+    static let bundleID   = "com.example.CurrentLocation"
+}
