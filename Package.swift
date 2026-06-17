@@ -16,6 +16,7 @@ let package = Package(
     targets: [
         .target(
             name: "CurrentLocation",
+            exclude: ["LocalConfig.swift.example"],
             swiftSettings: [
                 .swiftLanguageMode(.v5)
             ]

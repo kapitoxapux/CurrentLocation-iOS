@@ -66,7 +66,7 @@ final class LocationTracker: NSObject, ObservableObject {
 
 // MARK: - CLLocationManagerDelegate
 
-extension LocationTracker: CLLocationManagerDelegate {
+extension LocationTracker: @preconcurrency CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         lastLocation = location

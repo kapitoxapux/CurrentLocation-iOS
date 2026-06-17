@@ -1,3 +1,3 @@
 version: 1
-bundleID: com.example.CurrentLocation
+bundleID: ru.v-zachet.CurrentLocation
 infoPath: Info.plist
