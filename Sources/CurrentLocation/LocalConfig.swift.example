@@ -4,4 +4,6 @@
 enum LocalConfig {
     static let apiBaseURL = "https://your-server:port"
     static let bundleID   = "com.example.CurrentLocation"
+    // Совпадает с REGISTRATION_KEY сервера, без него /auth/register отвечает 403
+    static let registrationKey = "your-registration-key"
 }

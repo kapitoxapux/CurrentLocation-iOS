@@ -16,7 +16,8 @@ struct AuthClient {
     func register(deviceID: String, name: String? = nil) async throws -> RegisterResponse {
         var body = ["android_id": deviceID]
         if let name { body["name"] = name }
-        return try await post(path: "/auth/register", body: body)
+        return try await post(path: "/auth/register", body: body,
+                              headers: ["X-Registration-Key": Config.registrationKey])
     }
 
     func refresh(token: String) async throws -> RefreshResponse? {
@@ -31,10 +32,12 @@ struct AuthClient {
         return try JSONDecoder().decode(RefreshResponse.self, from: data)
     }
 
-    private func post<T: Decodable>(path: String, body: [String: String]) async throws -> T {
+    private func post<T: Decodable>(path: String, body: [String: String],
+                                    headers: [String: String] = [:]) async throws -> T {
         var request = URLRequest(url: url(path: path))
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        for (name, value) in headers { request.setValue(value, forHTTPHeaderField: name) }
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
         let (data, _) = try await session.data(for: request)
         return try JSONDecoder().decode(T.self, from: data)
